@@ -10,6 +10,7 @@ on:
 
 jobs:
   build:
+    timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -121,8 +122,8 @@ jobs:
 
       - name: E2E - Archive output
         uses: actions/upload-artifact@v4
-        if: steps.e2e-check-for-playwright.outputs.has-e2e-playwright == 'true' && steps.e2e-run-tests.outcome != 'success'
+        if: steps.e2e-check-for-playwright.outputs.has-e2e-playwright == 'true'
         with:
           name: playwright-report
-          path: playwright-report
-          retention-days: 5
+          path: playwright-report/
+          retention-days: 30
