@@ -94,8 +94,8 @@ jobs:
           ./ccbin/cc-test-reporter sum-coverage out/codeclimate.*.json -d -p 1 -o out/codeclimate.total.json
           ./ccbin/cc-test-reporter upload-coverage -i out/codeclimate.total.json
 
-      - name: Check for E2E (playwright)
-        id: check-for-e2e-playwright
+      - name: E2E - Check for playwright
+        id: e2e-check-for-playwright
         run: |
           if [ -d "playwright" ]
           then
@@ -103,24 +103,25 @@ jobs:
           fi
 
       - name: E2E - Start Grafana in Docker
-        if: steps.check-for-e2e-playwright.outputs.has-e2e-playwright == 'true'
+        if: steps.e2e-check-for-playwright.outputs.has-e2e-playwright == 'true'
         run: docker-compose up -d
 
       - name: E2E - Install playwright dependencies
-        if: steps.check-for-e2e-playwright.outputs.has-e2e-playwright == 'true'
-        run: yarn playwright install
+        if: steps.e2e-check-for-playwright.outputs.has-e2e-playwright == 'true'
+        run: sudo apt-get update && yarn playwright install --with-deps
 
-      - name: Run e2e tests
-        if: steps.check-for-e2e-playwright.outputs.has-e2e-playwright == 'true'
+      - name: E2E - Run tests
+        id: e2e-run-tests
+        if: steps.e2e-check-for-playwright.outputs.has-e2e-playwright == 'true'
         run: yarn run e2e:playwright
 
       - name: E2E - Stop Grafana in Docker
-        if: steps.check-for-e2e-playwright.outputs.has-e2e-playwright == 'true'
+        if: steps.e2e-check-for-playwright.outputs.has-e2e-playwright == 'true'
         run: docker-compose down
 
       - name: Archive E2E output
         uses: actions/upload-artifact@v4
-        if: steps.check-for-e2e-playwright.outputs.has-e2e-playwright == 'true' && steps.run-e2e-tests.outcome != 'success'
+        if: steps.e2e-check-for-playwright.outputs.has-e2e-playwright == 'true' && steps.e2e-run-tests.outcome != 'success'
         with:
           name: playwright-report
           path: playwright-report
