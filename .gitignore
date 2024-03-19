@@ -38,3 +38,5 @@ e2e-results/
 .DS_Store
 provisioning/
 .stignore
+
+playwright/.auth/admin.json
