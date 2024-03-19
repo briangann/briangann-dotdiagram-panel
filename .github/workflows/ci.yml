@@ -106,6 +106,10 @@ jobs:
         if: steps.check-for-e2e-playwright.outputs.has-e2e-playwright == 'true'
         run: docker-compose up -d
 
+      #- name: Setup playwright
+      #  if: steps.check-for-e2e-playwright.outputs.has-e2e-playwright == 'true'
+      #  run: yarn playwright install
+
       - name: Run e2e tests
         if: steps.check-for-e2e-playwright.outputs.has-e2e-playwright == 'true'
         run: yarn run e2e:playwright

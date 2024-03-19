@@ -4477,6 +4477,7 @@ __metadata:
     jest-environment-jsdom: "npm:^29.7.0"
     jest-junit: "npm:^16.0.0"
     path-browserify: "npm:1.0.1"
+    playwright: "npm:^1.42.1"
     prettier: "npm:3.2.5"
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
@@ -9874,7 +9875,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright@npm:1.42.1":
+"playwright@npm:1.42.1, playwright@npm:^1.42.1":
   version: 1.42.1
   resolution: "playwright@npm:1.42.1"
   dependencies:
