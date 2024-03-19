@@ -1,0 +1,163 @@
+import React, { useState, useEffect } from 'react';
+
+import { IconName, Button, InlineSwitch, Form, InlineField, InlineFieldRow, InlineLabel, Input, Select, Field, FieldSet } from '@grafana/ui';
+import { DisplayModes, CompositeItemProps } from './types';
+
+export const CompositeItem: React.FC<CompositeItemProps> = (options) => {
+  const [composite, setComposite] = useState(options.composite);
+  const [visibleIcon] = useState<IconName>('eye');
+  const [hiddenIcon] = useState<IconName>('eye-slash');
+
+  function removeItem() {
+    alert('high');
+    // call parent remove function
+  }
+
+  useEffect(() => {
+    options.composite.showComposite = composite.showComposite;
+    options.composite.name = composite.name;
+    options.composite.showName = composite.showName;
+    options.composite.showValue = composite.showValue;
+    options.composite.showMembers = composite.showMembers;
+    options.composite.displayMode = composite.displayMode;
+    options.composite.clickThrough = composite.clickThrough;
+    options.composite.clickThroughSanitize = composite.clickThroughSanitize;
+    options.composite.clickThroughOpenNewTab = composite.clickThroughOpenNewTab;
+  }, [composite, options.composite]);
+
+  function toggleShowName() {
+    const currentState = composite.showName;
+    setComposite({ ...composite, showName: !currentState });
+  }
+
+  return (
+    <>
+      <Button fill="text" icon="trash-alt" onClick={removeItem}></Button>
+      <Button
+        fill="text"
+        icon={composite.showComposite ? visibleIcon : hiddenIcon}
+        onClick={() => setComposite({ ...composite, showComposite: !composite.showComposite })} />
+      <Form onSubmit={() => console.log('call refresh?')}>
+        {() => (
+          <div style={{ width: '100%' }}>
+
+            <InlineFieldRow>
+              <InlineField labelWidth={15} grow label="Name" tooltip="Name or Regular Expression" disabled={!composite.showComposite}>
+                <Input
+                  value={composite.name}
+                  placeholder=""
+                  onChange={(e) => setComposite({ ...composite, name: e.currentTarget.value })} />
+              </InlineField>
+            </InlineFieldRow>
+
+          <FieldSet>
+            <Field label="Composite Name" description="Name or Regular Expression" disabled={!composite.showComposite}>
+                <Input
+                  value={composite.name}
+                  placeholder=""
+                  onChange={(e) => setComposite({ ...composite, name: e.currentTarget.value })} />
+              </Field>
+            <InlineSwitch
+                showLabel={true}
+                label="Show Name"
+                transparent={true}
+                value={composite.showName}
+                disabled={!composite.showComposite}
+                onChange={toggleShowName}>
+              </InlineSwitch>
+              <InlineSwitch
+                showLabel={true}
+                label="Show Value"
+                transparent={true}
+                value={composite.showValue}
+                disabled={!composite.showComposite}
+                onChange={() => setComposite({ ...composite, showValue: !composite.showValue })}
+              />
+              <InlineSwitch
+                showLabel={true}
+                label="Show Members"
+                transparent={true}
+                value={composite.showMembers}
+                disabled={!composite.showComposite}
+                onChange={() => setComposite({ ...composite, showMembers: !composite.showMembers })}
+              />
+          </FieldSet>
+            <InlineFieldRow>
+              <InlineLabel width={15} tooltip="Show Name - toggles if the composite name is to be displayed. Show Value - toggles if the value is to be displayed. Show Members - will also display the members in addition to the composite.">
+              Options
+              </InlineLabel>
+              <InlineSwitch
+                showLabel={true}
+                label="Show Name"
+                transparent={true}
+                value={composite.showName}
+                disabled={!composite.showComposite}
+                onChange={toggleShowName}>
+              </InlineSwitch>
+              <InlineSwitch
+                showLabel={true}
+                label="Show Value"
+                transparent={true}
+                value={composite.showValue}
+                disabled={!composite.showComposite}
+                onChange={() => setComposite({ ...composite, showValue: !composite.showValue })}
+              />
+              <InlineSwitch
+                showLabel={true}
+                label="Show Members"
+                transparent={true}
+                value={composite.showMembers}
+                disabled={!composite.showComposite}
+                onChange={() => setComposite({ ...composite, showMembers: !composite.showMembers })}
+              />
+            </InlineFieldRow>
+            <InlineFieldRow>
+              <InlineField labelWidth={15} label="Display Mode" tooltip="All will display all members, Triggered will only display those meeting threshold settings" disabled={!composite.showComposite}>
+                <Select
+                  value={composite.displayMode}
+                  menuShouldPortal
+                  width={24}
+                  onChange={(v) => {
+                    setComposite({ ...composite, displayMode: v });
+                  }}
+                  options={DisplayModes}
+              />
+              </InlineField>
+            </InlineFieldRow>
+
+            <InlineFieldRow>
+              <InlineLabel width={15} tooltip="Options for composite mouse click">
+                Clickthrough
+              </InlineLabel>
+              <InlineSwitch
+                showLabel={true}
+                label="Sanitize"
+                transparent={false}
+                disabled={!composite.showComposite}
+                value={composite.clickThroughSanitize}
+                onChange={() => setComposite({ ...composite, clickThroughSanitize: !composite.clickThroughSanitize })}
+              />
+              <InlineSwitch
+                showLabel={true}
+                label="Open in New Tab"
+                transparent={false}
+                value={composite.clickThroughOpenNewTab}
+                disabled={!composite.showComposite}
+                onChange={() => setComposite({ ...composite, clickThroughOpenNewTab: !composite.clickThroughOpenNewTab })}
+              />
+            </InlineFieldRow>
+
+            <InlineFieldRow>
+              <InlineField labelWidth={15} grow label="URL" tooltip="URL to Open on Click" disabled={!composite.showComposite}>
+                <Input
+                  value={composite.clickThrough}
+                  placeholder="https://"
+                  onChange={(e) => setComposite({ ...composite, clickThrough: e.currentTarget.value })} />
+              </InlineField>
+            </InlineFieldRow>
+          </div>
+        )}
+      </Form>
+    </>
+  );
+};
