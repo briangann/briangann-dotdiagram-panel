@@ -119,7 +119,7 @@ jobs:
         if: steps.e2e-check-for-playwright.outputs.has-e2e-playwright == 'true'
         run: docker-compose down
 
-      - name: Archive E2E output
+      - name: E2E - Archive output
         uses: actions/upload-artifact@v4
         if: steps.e2e-check-for-playwright.outputs.has-e2e-playwright == 'true' && steps.e2e-run-tests.outcome != 'success'
         with:
