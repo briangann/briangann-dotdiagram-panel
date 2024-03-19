@@ -40,3 +40,4 @@ provisioning/
 .stignore
 
 playwright/.auth/admin.json
+playwright-report
