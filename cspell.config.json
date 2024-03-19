@@ -15,7 +15,9 @@
     "dotparser",
     "fontawesome",
     "fortawesome",
+    "gdev",
     "hpcc",
+    "testdata",
     "timeseries",
     "typecheck",
     "workdir"
