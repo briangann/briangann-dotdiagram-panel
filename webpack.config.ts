@@ -25,11 +25,13 @@ const config = async (env: any): Promise<Configuration> => {
     },
     resolve: {
       fallback: {
+	buffer: require.resolve('buffer/'),
         crypto: require.resolve('crypto-browserify'),
         fs: false,
         path: require.resolve('path-browserify'),
         stream: require.resolve('stream-browserify'),
-        util: require.resolve("util"),
+        util: require.resolve('util'),
+	vm: require.resolve('vm-browserify'),
       },
     },
   };
