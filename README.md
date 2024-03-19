@@ -31,14 +31,14 @@ Then browse to http://localhost:3000
 
 ## External Dependencies
 
-* Grafana 8.4.x
+* Grafana 10.3.x
 
 ## TODO
 
 ## Build Dependencies
 
-* yarn
-* Node v18
+* yarn v4 (berry)
+* Node v20
 
 ## Building
 
