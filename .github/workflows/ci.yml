@@ -93,3 +93,31 @@ jobs:
         run: |
           ./ccbin/cc-test-reporter sum-coverage out/codeclimate.*.json -d -p 1 -o out/codeclimate.total.json
           ./ccbin/cc-test-reporter upload-coverage -i out/codeclimate.total.json
+
+      - name: Check for E2E (playwright)
+        id: check-for-e2e-playwright
+        run: |
+          if [ -d "playwright" ]
+          then
+            echo "has-e2e-playwright=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Start grafana docker
+        if: steps.check-for-e2e-playwright.outputs.has-e2e-playwright == 'true'
+        run: docker-compose up -d
+
+      - name: Run e2e tests
+        if: steps.check-for-e2e-playwright.outputs.has-e2e-playwright == 'true'
+        run: yarn run e2e:playwright
+
+      - name: Stop grafana docker
+        if: steps.check-for-e2e-playwright.outputs.has-e2e-playwright == 'true'
+        run: docker-compose down
+
+      - name: Archive E2E output
+        uses: actions/upload-artifact@v4
+        if: steps.check-for-e2e-playwright.outputs.has-e2e-playwright == 'true' && steps.run-e2e-tests.outcome != 'success'
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 5
