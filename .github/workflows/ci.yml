@@ -102,19 +102,19 @@ jobs:
             echo "has-e2e-playwright=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: Start grafana docker
+      - name: E2E - Start Grafana in Docker
         if: steps.check-for-e2e-playwright.outputs.has-e2e-playwright == 'true'
         run: docker-compose up -d
 
-      #- name: Setup playwright
-      #  if: steps.check-for-e2e-playwright.outputs.has-e2e-playwright == 'true'
-      #  run: yarn playwright install
+      - name: E2E - Install playwright dependencies
+        if: steps.check-for-e2e-playwright.outputs.has-e2e-playwright == 'true'
+        run: yarn playwright install
 
       - name: Run e2e tests
         if: steps.check-for-e2e-playwright.outputs.has-e2e-playwright == 'true'
         run: yarn run e2e:playwright
 
-      - name: Stop grafana docker
+      - name: E2E - Stop Grafana in Docker
         if: steps.check-for-e2e-playwright.outputs.has-e2e-playwright == 'true'
         run: docker-compose down
 
